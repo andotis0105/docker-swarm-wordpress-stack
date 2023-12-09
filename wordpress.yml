@@ -1,0 +1,47 @@
+version: '3.7'
+
+services:
+  mysql:
+    image: mysql:latest
+    networks:
+      - backend
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      MYSQL_DATABASE: wordpress
+    secrets:
+      - mysql_root_password
+
+  wordpress:
+    image: wordpress:latest
+    networks:
+      - frontend
+      - backend
+    ports:
+      - "80:80"
+    deploy:
+      replicas: 3
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/wordpress_db_password
+      WORDPRESS_DB_NAME: wordpress
+    secrets:
+      - wordpress_db_password
+
+networks:
+  frontend:
+    driver: overlay
+
+  backend:
+    driver: overlay
+
+volumes:
+  mysql_data:
+
+secrets:
+  mysql_root_password:
+    external: true
+  wordpress_db_password:
+    external: true
