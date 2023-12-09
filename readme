@@ -1,0 +1,3 @@
+# WordPress and MySQL Docker Stack for Docker Swarm
+
+This repository contains a Docker Compose YAML file for deploying WordPress and MySQL using Docker Swarm, as discussed in my Medium article.
